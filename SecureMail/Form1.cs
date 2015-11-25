@@ -24,8 +24,39 @@ namespace SecureMail
         SmtpClient client;
         MailAddress адресОтправителя;
         MailMessage сообщение;
-        public Form1()
+        struct ДанныеПользователя
         {
+            private MailAddress адрес;
+            private string пароль;
+            public string Пароль
+            {
+                get
+                {
+                    return пароль;
+                }
+
+                set
+                {
+                    пароль = value;
+                }
+            }
+
+            public MailAddress Адрес
+            {
+                get
+                {
+                    return адрес;
+                }
+
+                set
+                {
+                    адрес = value;
+                }
+            }
+        }
+        ДанныеПользователя пользователь;
+        public Form1()
+        {;
             InitializeComponent();
         }
 
@@ -61,7 +92,14 @@ namespace SecureMail
 
         private void toolStripMenuItem6_Click(object sender, EventArgs e)
         {
-
+            Form2 form = new Form2(this);
+            form.ShowDialog(this);
+            form.Focus();
+        }
+        public void УстановитьДанныеПользователя(MailAddress адрес, string пароль)
+        { 
+            пользователь.Адрес = адрес;
+            пользователь.Пароль = пароль;
         }
     }
 }
