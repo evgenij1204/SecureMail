@@ -18,8 +18,7 @@ namespace SecureMail
 {
     public partial class Form1 : Form
     {
-        const string filter = "rsa files (*.rsa)|*.rsa";
-        RSACryptoServiceProvider csp;
+        const string фильтрОткрытогоКлюча = "Open key (*.okey)|*.okey";
         struct ДанныеПользователя
         {
             private MailAddress адрес;
@@ -64,20 +63,18 @@ namespace SecureMail
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.RootFolder = Environment.SpecialFolder.MyDocuments;
             fbd.Description = "Выберите место для сохранения ключей";
-            fbd.ShowDialog();
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                if (csp==null)
-                {
-                    csp = new RSACryptoServiceProvider();
-                }
-                StreamWriter sw = new StreamWriter(fbd.SelectedPath+"\\OpenKey.rsa");
+                RSACryptoServiceProvider csp = new RSACryptoServiceProvider();
+                StreamWriter sw = new StreamWriter(fbd.SelectedPath+"\\OpenKey.okey");
                 sw.WriteLine(csp.ToXmlString(false));
                 sw.Close();
-                sw = new StreamWriter(fbd.SelectedPath + "\\PrivateKey.rsa");
+                sw = new StreamWriter(fbd.SelectedPath + "\\PrivateKey.pkey");
                 sw.WriteLine(csp.ToXmlString(true));
                 sw.Close();
+                MessageBox.Show(this, "Ключи сохранены по адресу:\n" + fbd.SelectedPath.ToString(), "Еведомление.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -98,41 +95,14 @@ namespace SecureMail
             пользователь.Пароль = пароль;
             toolStripStatusLabel1.Text = "Данные пользователя введены.";
             button3.Enabled = true;
-        }
-        public void СменитьСтатусКлюча()
-        {
-            toolStripStatusLabel2.Text = "Ключ шифрования загружен.";
             button1.Enabled = true;
         }
 
         private void отправитьСообщениеКакЕсть(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(textBox1.Text))
-            {
-                try
-                {
-                    MailAddress получатель = new MailAddress(textBox1.Text);
-
-                    MailMessage сообщение = new MailMessage(пользователь.Адрес, получатель);
-                    сообщение.Subject = textBox2.Text;
-                    сообщение.Body = richTextBox1.Text;
-
-                    SmtpClient client = new SmtpClient("smtp." + пользователь.Адрес.Host, 25);
-                    client.Credentials = new NetworkCredential(пользователь.Адрес.Address, пользователь.Пароль);
-                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    client.EnableSsl = true;
-                    object obj = сообщение;
-                    client.SendCompleted += SendCompleted;
-                    client.SendAsync(сообщение, obj);
-
-                }
-                catch (Exception exp)
-                {
-                    MessageBox.Show(this, exp.Message, "Ошибка!", MessageBoxButtons.OK,MessageBoxIcon.Error);
-                }                
-            }
+            отправитьСообщение(richTextBox1.Text);
         }
-        void SendCompleted(object sender, AsyncCompletedEventArgs e)
+        void СообщениеДоставлено(object sender, AsyncCompletedEventArgs e)
         {
             MailMessage mail = (MailMessage)e.UserState;
             string subject = mail.Subject;
@@ -153,5 +123,62 @@ namespace SecureMail
             }
         }
 
+        private void отправитьСообщениеЗашифрованным(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = фильтрОткрытогоКлюча;
+            ofd.FilterIndex = 1;
+            ofd.Title = "Выберите файл открытого ключа.";
+            ofd.Multiselect = false;
+            ofd.RestoreDirectory = true;
+            if (ofd.ShowDialog()==DialogResult.OK)
+            {
+                try
+                {
+                    StreamReader sr = new StreamReader(ofd.FileName);
+                    string ключ = sr.ReadToEnd();
+                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+                    rsa.FromXmlString(ключ);
+                    //byte[] закодированноеСообщение = rsa.Encrypt(Encoding.ASCII.GetBytes(richTextBox1.Text), true);
+                    string msg = "<Сообщение закодировано>\n<MSG>"+Encoding.ASCII.GetString(rsa.Encrypt(Encoding.ASCII.GetBytes(richTextBox1.Text), true)) + "</MSG>";
+                    отправитьСообщение(msg);
+                    sr.Close();
+                }
+                catch (Exception exp)
+                {
+                    показатьСообщениеОбОшибке(exp);
+                }
+            }
+        }
+        private void отправитьСообщение(string строка)
+        {
+            if (!string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                try
+                {
+                    MailAddress получатель = new MailAddress(textBox1.Text);
+
+                    MailMessage сообщение = new MailMessage(пользователь.Адрес, получатель);
+                    сообщение.Subject = textBox2.Text;
+                    сообщение.Body = строка;
+
+                    SmtpClient client = new SmtpClient("smtp." + пользователь.Адрес.Host, 25);
+                    client.Credentials = new NetworkCredential(пользователь.Адрес.Address, пользователь.Пароль);
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.EnableSsl = true;
+                    object obj = сообщение;
+                    client.SendCompleted += СообщениеДоставлено;
+                    client.SendAsync(сообщение, obj);
+                }
+                catch (Exception exp)
+                {
+                    показатьСообщениеОбОшибке(exp);
+                }
+            }
+        }
+        private void показатьСообщениеОбОшибке(Exception exp)
+        {
+            MessageBox.Show(this, exp.Message, "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }
