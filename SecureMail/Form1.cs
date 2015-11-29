@@ -19,7 +19,7 @@ namespace SecureMail
 {
     public partial class Form1 : Form
     {
-        const int blokSize = 80;
+        const int размерБлокаШифрования = 80;
         const string фильтрОткрытогоКлюча = "Open key (*.okey)|*.okey";
         const string фильтрЗакрытогоКлюча = "Private key (*.pkey)|*.pkey";
         struct ДанныеПользователя
@@ -38,7 +38,6 @@ namespace SecureMail
                     пароль = value;
                 }
             }
-
             public MailAddress Адрес
             {
                 get
@@ -53,7 +52,7 @@ namespace SecureMail
             }
         }
         MailMessage полученноеСообщение;
-        ДанныеПользователя пользователь;
+        ДанныеПользователя аккаунт;
         public Form1()
         {
             InitializeComponent();
@@ -64,19 +63,19 @@ namespace SecureMail
         }
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.RootFolder = Environment.SpecialFolder.MyDocuments;
-            fbd.Description = "Выберите место для сохранения ключей";
-            if (fbd.ShowDialog() == DialogResult.OK)
+            FolderBrowserDialog обозревательПапок = new FolderBrowserDialog();
+            обозревательПапок.RootFolder = Environment.SpecialFolder.MyDocuments;
+            обозревательПапок.Description = "Выберите место для сохранения ключей";
+            if (обозревательПапок.ShowDialog() == DialogResult.OK)
             {
-                RSACryptoServiceProvider csp = new RSACryptoServiceProvider(1024);
-                StreamWriter sw = new StreamWriter(fbd.SelectedPath+"\\OpenKey.okey");
-                sw.WriteLine(csp.ToXmlString(false));
-                sw.Close();
-                sw = new StreamWriter(fbd.SelectedPath + "\\PrivateKey.pkey");
-                sw.WriteLine(csp.ToXmlString(true));
-                sw.Close();
-                MessageBox.Show(this, "Ключи сохранены по адресу:\n" + fbd.SelectedPath.ToString(), "Еведомление.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RSACryptoServiceProvider RSACSP = new RSACryptoServiceProvider(1024);
+                StreamWriter потокПишущийВФайл = new StreamWriter(обозревательПапок.SelectedPath+"\\OpenKey.okey");
+                потокПишущийВФайл.WriteLine(RSACSP.ToXmlString(false));
+                потокПишущийВФайл.Close();
+                потокПишущийВФайл = new StreamWriter(обозревательПапок.SelectedPath + "\\PrivateKey.pkey");
+                потокПишущийВФайл.WriteLine(RSACSP.ToXmlString(true));
+                потокПишущийВФайл.Close();
+                MessageBox.Show(this, "Ключи сохранены по адресу:\n" + обозревательПапок.SelectedPath.ToString(), "Еведомление.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -85,23 +84,23 @@ namespace SecureMail
         }
         private void toolStripMenuItem6_Click(object sender, EventArgs e)
         {
-            Form2 form = new Form2(this);
-            form.ShowDialog(this);
-            form.Focus();
+            Form2 формаВводаУчетныхДанных = new Form2(this);
+            формаВводаУчетныхДанных.ShowDialog(this);
+            формаВводаУчетныхДанных.Focus();
         }
         public void УстановитьДанныеПользователя(MailAddress адрес, string пароль)
         {
-            пользователь.Адрес = адрес;
-            пользователь.Пароль = пароль;
-            toolStripStatusLabel1.Text = "Данные пользователя введены.";
+            аккаунт.Адрес = адрес;
+            аккаунт.Пароль = пароль;
+            меткаВСтрокеСтатуса.Text = "Данные пользователя введены.";
             if (groupBox1.Enabled == true)
             {
-                button3.Enabled = true;
-                button1.Enabled = true;
+                кнопкаОТправитьСообщениеКакЕсть.Enabled = true;
+                кнопкаОтправитьСообщениеЗашифрованным.Enabled = true;
             }
             if (groupBox5.Enabled==true)
             {
-                button2.Enabled = true;
+                кнопкаПолучитьСообщение.Enabled = true;
             }
         }
         private void отправитьСообщениеКакЕсть(object sender, EventArgs e)
@@ -110,90 +109,74 @@ namespace SecureMail
         }
         void СообщениеДоставлено(object sender, AsyncCompletedEventArgs e)
         {
-            MailMessage mail = (MailMessage)e.UserState;
-            string subject = mail.Subject;
-
+            MailMessage сообщение = (MailMessage)e.UserState;
+            string субъект = сообщение.Subject;
             if (e.Cancelled)
             {
-                string cancelled = string.Format("[{0}] Отправка отменена.", subject);
+                string cancelled = string.Format("[{0}] Отправка отменена.", субъект);
                 MessageBox.Show(cancelled);
             }
             if (e.Error != null)
             {
-                string error = String.Format("[{0}] {1}", subject, e.Error.ToString());
+                string error = String.Format("[{0}] {1}", субъект, e.Error.ToString());
                 MessageBox.Show(error,"Ошибка!",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             else
-            {
                 MessageBox.Show("Сообщение успешно отправлено!","Уведомление.",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            }
         }
         private void отправитьСообщениеЗашифрованным(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = фильтрОткрытогоКлюча;
-            ofd.FilterIndex = 1;
-            ofd.Title = "Выберите файл открытого ключа.";
-            ofd.Multiselect = false;
-            ofd.RestoreDirectory = true;
-            if (ofd.ShowDialog()==DialogResult.OK)
+            OpenFileDialog диалоговоеОкноОткрытияФайла = new OpenFileDialog();
+            диалоговоеОкноОткрытияФайла.Filter = фильтрОткрытогоКлюча;
+            диалоговоеОкноОткрытияФайла.FilterIndex = 1;
+            диалоговоеОкноОткрытияФайла.Title = "Выберите файл открытого ключа.";
+            диалоговоеОкноОткрытияФайла.Multiselect = false;
+            диалоговоеОкноОткрытияФайла.RestoreDirectory = true;
+            if (диалоговоеОкноОткрытияФайла.ShowDialog()==DialogResult.OK)
             {
                 try
                 {
-                    StreamReader sr = new StreamReader(ofd.FileName);
-                    string ключ = sr.ReadToEnd();
-                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-                    rsa.FromXmlString(ключ);
-                    byte[] buf = Encoding.UTF32.GetBytes(richTextBox1.Text);
-                    string tmpSTR = string.Empty;
-                    //byte[] buff;
-                    if (buf.Length > blokSize)
+                    StreamReader потокЧитающийИзФайла = new StreamReader(диалоговоеОкноОткрытияФайла.FileName);
+                    string ключ = потокЧитающийИзФайла.ReadToEnd();
+                    RSACryptoServiceProvider RSACSP = new RSACryptoServiceProvider();
+                    RSACSP.FromXmlString(ключ);
+                    byte[] массивБайтов = Encoding.UTF32.GetBytes(richTextBox1.Text);
+                    string выходнаяСтрока = string.Empty;
+                    if (массивБайтов.Length > размерБлокаШифрования)
                     {
-                        int count = 0;
-                        int countBloks = 0;
-                        bool flag = false;
-                        byte[] tmp = new byte[blokSize];
-                        for (int i = 0; i < buf.Length; i++)
+                        int итератор = 0;
+                        int количествоБлоков = 0;
+                        bool флаг = false;
+                        byte[] блок = new byte[размерБлокаШифрования];
+                        for (int i = 0; i < массивБайтов.Length; i++)
                         {
-                            byte item = buf[i];
-                            if (count < blokSize && i != buf.Length)
+                            if (итератор < размерБлокаШифрования && i != массивБайтов.Length)
                             {
-                                tmp[count] = item;
-                                count++;
+                                блок[итератор] = массивБайтов[i];
+                                итератор++;
                             }
                             else
                             {
-                                byte[] tt = rsa.Encrypt(tmp, true);
-                                //buff = tt;
-                                tmpSTR += ByteToHEXString(tt);//Encoding.UTF32.GetString(tt);
-                                int ll = tmpSTR.Length;
-                                count = 0;
-                                countBloks++;
+                                выходнаяСтрока += ByteToHEXString(RSACSP.Encrypt(блок, true));
+                                итератор = 0;
+                                количествоБлоков++;
                                 i--;
-                                if (buf.Length > blokSize * countBloks + blokSize)
-                                    tmp = new byte[blokSize];
+                                if (массивБайтов.Length > размерБлокаШифрования * количествоБлоков + размерБлокаШифрования)
+                                    блок = new byte[размерБлокаШифрования];
                                 else
                                 {
-                                    tmp = new byte[buf.Length - blokSize * countBloks];
-                                    flag = true;
+                                    блок = new byte[массивБайтов.Length - размерБлокаШифрования * количествоБлоков];
+                                    флаг = true;
                                 }
                             }
                         }
-                        if (flag == true)
-                        {
-                            byte[] tt = rsa.Encrypt(tmp, true);
-                            tmpSTR += ByteToHEXString(rsa.Encrypt(tmp, true));
-                        }
+                        if (флаг == true)
+                            выходнаяСтрока += ByteToHEXString(RSACSP.Encrypt(блок, true));
                     }
                     else
-                    {
-                        byte[] tt = rsa.Encrypt(buf, true);
-                        tmpSTR += ByteToHEXString(tt);
-                    }
-                    int len = tmpSTR.Length;
-                    string msg = "<!MSG_ENCRYPT!>\n<MSG>" + tmpSTR +"</MSG>";
-                    отправитьСообщение(msg);
-                    sr.Close();
+                        выходнаяСтрока += ByteToHEXString(RSACSP.Encrypt(массивБайтов, true));
+                    отправитьСообщение("<!MSG_ENCRYPT!>\n<MSG>" + выходнаяСтрока + "</MSG>");
+                    потокЧитающийИзФайла.Close();
                 }
                 catch (Exception exp)
                 {
@@ -201,25 +184,25 @@ namespace SecureMail
                 }
             }
         }
-        private string ByteToHEXString(byte[] b)
+        private string ByteToHEXString(byte[] массив)
         {
-            string s = string.Empty;
-            foreach (var item in b)
+            string выходнаяСтрока = string.Empty;
+            foreach (var элемент in массив)
             {
-                s += item.ToString("X2");
+                выходнаяСтрока += элемент.ToString("X2");
             }
-            return s;
+            return выходнаяСтрока;
         }
-        private static byte[] HEXStringToByte(string s)
+        private static byte[] HEXStringToByte(string строка)
         {
-            byte[] b = new byte[s.Length / 2];
-            int iter = 0;
-            for (int i = 0; i < s.Length; i += 2)
+            byte[] массивБайтов = new byte[строка.Length / 2];
+            int итератор = 0;
+            for (int i = 0; i < строка.Length; i += 2)
             {
-                b[iter] = Convert.ToByte(s[i].ToString() + s[i + 1].ToString(), 16);
-                iter++;
+                массивБайтов[итератор] = Convert.ToByte(строка[i].ToString() + строка[i + 1].ToString(), 16);
+                итератор++;
             }
-            return b;
+            return массивБайтов;
         }
         private void отправитьСообщение(string строка)
         {
@@ -229,17 +212,17 @@ namespace SecureMail
                 {
                     MailAddress получатель = new MailAddress(textBox1.Text);
 
-                    MailMessage сообщение = new MailMessage(пользователь.Адрес, получатель);
+                    MailMessage сообщение = new MailMessage(аккаунт.Адрес, получатель);
                     сообщение.Subject = textBox2.Text;
                     сообщение.Body = строка;
 
-                    SmtpClient client = new SmtpClient("smtp." + пользователь.Адрес.Host, 25);
-                    client.Credentials = new NetworkCredential(пользователь.Адрес.Address, пользователь.Пароль);
-                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    client.EnableSsl = true;
+                    SmtpClient клиентДляОтправкиСообщения = new SmtpClient("smtp." + аккаунт.Адрес.Host, 25);
+                    клиентДляОтправкиСообщения.Credentials = new NetworkCredential(аккаунт.Адрес.Address, аккаунт.Пароль);
+                    клиентДляОтправкиСообщения.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    клиентДляОтправкиСообщения.EnableSsl = true;
                     object obj = сообщение;
-                    client.SendCompleted += СообщениеДоставлено;
-                    client.SendAsync(сообщение, obj);
+                    клиентДляОтправкиСообщения.SendCompleted += СообщениеДоставлено;
+                    клиентДляОтправкиСообщения.SendAsync(сообщение, obj);
                 }
                 catch (Exception exp)
                 {
@@ -259,10 +242,10 @@ namespace SecureMail
             groupBox4.Visible = false;
             groupBox5.Enabled = true;
             groupBox5.Visible = true;
-            button2.Enabled = false;
+            кнопкаПолучитьСообщение.Enabled = false;
             button4.Enabled = false;
-            пользователь.Адрес = null;
-            пользователь.Пароль = string.Empty;
+            аккаунт.Адрес = null;
+            аккаунт.Пароль = string.Empty;
             statusStrip1.Text = "Данные пользователя не введены.";
         }
         private void ПоказатьЭкранОтправкиПисьма(object sender, EventArgs e)
@@ -273,61 +256,60 @@ namespace SecureMail
             groupBox4.Visible = true;
             groupBox5.Enabled = false;
             groupBox5.Visible = false;
-            пользователь.Адрес = null;
-            пользователь.Пароль = string.Empty;
+            аккаунт.Адрес = null;
+            аккаунт.Пароль = string.Empty;
             statusStrip1.Text = "Данные пользователя не введены.";
         }
         private void получитьСообщение(object sender, EventArgs e)
         {
-            Pop3Client client = new Pop3Client();
-            client.Connect("pop." + пользователь.Адрес.Host, 995, true);
-            client.Authenticate(пользователь.Адрес.Address, пользователь.Пароль);
-            if (client.Connected)
+            Pop3Client клиентДляПолученияСообщения = new Pop3Client();
+            клиентДляПолученияСообщения.Connect("pop." + аккаунт.Адрес.Host, 995, true);
+            клиентДляПолученияСообщения.Authenticate(аккаунт.Адрес.Address, аккаунт.Пароль);
+            if (клиентДляПолученияСообщения.Connected)
             {
-                полученноеСообщение = client.GetMessage(client.GetMessageCount()).ToMailMessage();
-                richTextBox2.AppendText("От: " + полученноеСообщение.From.Address);
-                richTextBox2.AppendText("\nТема: " + полученноеСообщение.Subject);
-                richTextBox2.AppendText("\nСообщение: " + полученноеСообщение.Body);
-                client.Disconnect();
+                полученноеСообщение = клиентДляПолученияСообщения.GetMessage(клиентДляПолученияСообщения.GetMessageCount()).ToMailMessage();
+                полеОтображенияСообщения.AppendText("От: " + полученноеСообщение.From.Address);
+                полеОтображенияСообщения.AppendText("\nТема: " + полученноеСообщение.Subject);
+                полеОтображенияСообщения.AppendText("\nСообщение: " + полученноеСообщение.Body);
+                клиентДляПолученияСообщения.Disconnect();
                 if (полученноеСообщение.Body.IndexOf("<!MSG_ENCRYPT!>") != -1)
                     button4.Enabled = true;
             }
         }
         private void расшифроватьСообщение(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = фильтрЗакрытогоКлюча;
-            ofd.FilterIndex = 1;
-            ofd.Title = "Выберите файл закрытого ключа.";
-            ofd.Multiselect = false;
-            ofd.RestoreDirectory = true;
-            if (ofd.ShowDialog() == DialogResult.OK)
+            OpenFileDialog диалоговоеОкноОткрытияФайла = new OpenFileDialog();
+            диалоговоеОкноОткрытияФайла.Filter = фильтрЗакрытогоКлюча;
+            диалоговоеОкноОткрытияФайла.FilterIndex = 1;
+            диалоговоеОкноОткрытияФайла.Title = "Выберите файл закрытого ключа.";
+            диалоговоеОкноОткрытияФайла.Multiselect = false;
+            диалоговоеОкноОткрытияФайла.RestoreDirectory = true;
+            if (диалоговоеОкноОткрытияФайла.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    StreamReader sr = new StreamReader(ofd.FileName);
-                    string ключ = sr.ReadToEnd();
-                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-                    rsa.FromXmlString(ключ);
-                    int startMsg = полученноеСообщение.Body.IndexOf("<MSG>");
-                    int endMsg = полученноеСообщение.Body.IndexOf("</MSG>");
-                    string msg = полученноеСообщение.Body.Substring(startMsg + 5, endMsg - startMsg - 5);
-                    byte[] buf =  HEXStringToByte(msg);
-                    string tmpSTR = string.Empty;
-                    int countBlok = buf.Length / 128;
-                    for (int i = 0; i < countBlok; i++)
+                    StreamReader потокЧитающийИзФайла = new StreamReader(диалоговоеОкноОткрытияФайла.FileName);
+                    string ключ = потокЧитающийИзФайла.ReadToEnd();
+                    RSACryptoServiceProvider RSACSP = new RSACryptoServiceProvider();
+                    RSACSP.FromXmlString(ключ);
+                    int началоСообщения = полученноеСообщение.Body.IndexOf("<MSG>") + 5;
+                    int конецСообщения = полученноеСообщение.Body.IndexOf("</MSG>") - 5;
+                    string телоСообщения = полученноеСообщение.Body.Substring(началоСообщения, конецСообщения - началоСообщения);
+                    byte[] массивБайтов =  HEXStringToByte(телоСообщения);
+                    string временнаяСтрока = string.Empty;
+                    int количествоБлоков = массивБайтов.Length / 128;
+                    for (int i = 0; i < количествоБлоков; i++)
                     {
-                        byte[] b = buf.Skip(128 * i).ToArray();
-                        byte[] tmp = b.Take(128).ToArray();
-                        tmpSTR += ByteToHEXString(rsa.Decrypt(tmp, true));
+                        byte[] веременныйМассив = массивБайтов.Skip(128 * i).ToArray().Take(128).ToArray();
+                        временнаяСтрока += ByteToHEXString(RSACSP.Decrypt(веременныйМассив, true));
                     }
-                    msg = Encoding.UTF32.GetString(HEXStringToByte(tmpSTR));
-                    richTextBox2.Clear();
-                    richTextBox2.AppendText("От: " + полученноеСообщение.From.Address);
-                    richTextBox2.AppendText("\nТема: " + полученноеСообщение.Subject);
-                    richTextBox2.AppendText("\nСообщение: " +msg+полученноеСообщение.Body.Substring(endMsg+6));
-                    sr.Close();
-                    rsa.Dispose();
+                    телоСообщения = Encoding.UTF32.GetString(HEXStringToByte(временнаяСтрока));
+                    полеОтображенияСообщения.Clear();
+                    полеОтображенияСообщения.AppendText("От: " + полученноеСообщение.From.Address);
+                    полеОтображенияСообщения.AppendText("\nТема: " + полученноеСообщение.Subject);
+                    полеОтображенияСообщения.AppendText("\nСообщение: " +телоСообщения+полученноеСообщение.Body.Substring(конецСообщения+6));
+                    потокЧитающийИзФайла.Close();
+                    RSACSP.Dispose();
                 }
                 catch (Exception exp)
                 {

@@ -46,15 +46,15 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.меткаВСтрокеСтатуса = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.кнопкаОТправитьСообщениеКакЕсть = new System.Windows.Forms.Button();
+            this.кнопкаОтправитьСообщениеЗашифрованным = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.button4 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.кнопкаПолучитьСообщение = new System.Windows.Forms.Button();
+            this.полеОтображенияСообщения = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -216,7 +216,6 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(501, 24);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "evgenij-remnjov@mail.ru";
             // 
             // textBox2
             // 
@@ -228,7 +227,6 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(501, 24);
             this.textBox2.TabIndex = 2;
-            this.textBox2.Text = "test message";
             // 
             // label1
             // 
@@ -246,25 +244,25 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.меткаВСтрокеСтатуса});
             this.statusStrip1.Location = new System.Drawing.Point(0, 380);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(619, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // меткаВСтрокеСтатуса
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(193, 17);
-            this.toolStripStatusLabel1.Text = "Данные пользователя не введены";
+            this.меткаВСтрокеСтатуса.Name = "меткаВСтрокеСтатуса";
+            this.меткаВСтрокеСтатуса.Size = new System.Drawing.Size(193, 17);
+            this.меткаВСтрокеСтатуса.Text = "Данные пользователя не введены";
             // 
             // groupBox4
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.button3);
-            this.groupBox4.Controls.Add(this.button1);
+            this.groupBox4.Controls.Add(this.кнопкаОТправитьСообщениеКакЕсть);
+            this.groupBox4.Controls.Add(this.кнопкаОтправитьСообщениеЗашифрованным);
             this.groupBox4.Location = new System.Drawing.Point(13, 316);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(593, 58);
@@ -272,33 +270,33 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Отправка сообщения";
             // 
-            // button3
+            // кнопкаОТправитьСообщениеКакЕсть
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.кнопкаОТправитьСообщениеКакЕсть.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(225, 24);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(229, 28);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Как есть";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.отправитьСообщениеКакЕсть);
+            this.кнопкаОТправитьСообщениеКакЕсть.Enabled = false;
+            this.кнопкаОТправитьСообщениеКакЕсть.Location = new System.Drawing.Point(225, 24);
+            this.кнопкаОТправитьСообщениеКакЕсть.Name = "кнопкаОТправитьСообщениеКакЕсть";
+            this.кнопкаОТправитьСообщениеКакЕсть.Size = new System.Drawing.Size(229, 28);
+            this.кнопкаОТправитьСообщениеКакЕсть.TabIndex = 1;
+            this.кнопкаОТправитьСообщениеКакЕсть.Text = "Как есть";
+            this.кнопкаОТправитьСообщениеКакЕсть.UseVisualStyleBackColor = true;
+            this.кнопкаОТправитьСообщениеКакЕсть.Click += new System.EventHandler(this.отправитьСообщениеКакЕсть);
             // 
-            // button1
+            // кнопкаОтправитьСообщениеЗашифрованным
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.кнопкаОтправитьСообщениеЗашифрованным.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(7, 24);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(211, 28);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Зашифрованным";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.отправитьСообщениеЗашифрованным);
+            this.кнопкаОтправитьСообщениеЗашифрованным.Enabled = false;
+            this.кнопкаОтправитьСообщениеЗашифрованным.Location = new System.Drawing.Point(7, 24);
+            this.кнопкаОтправитьСообщениеЗашифрованным.Name = "кнопкаОтправитьСообщениеЗашифрованным";
+            this.кнопкаОтправитьСообщениеЗашифрованным.Size = new System.Drawing.Size(211, 28);
+            this.кнопкаОтправитьСообщениеЗашифрованным.TabIndex = 0;
+            this.кнопкаОтправитьСообщениеЗашифрованным.Text = "Зашифрованным";
+            this.кнопкаОтправитьСообщениеЗашифрованным.UseVisualStyleBackColor = true;
+            this.кнопкаОтправитьСообщениеЗашифрованным.Click += new System.EventHandler(this.отправитьСообщениеЗашифрованным);
             // 
             // groupBox5
             // 
@@ -306,7 +304,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.groupBox6);
-            this.groupBox5.Controls.Add(this.richTextBox2);
+            this.groupBox5.Controls.Add(this.полеОтображенияСообщения);
             this.groupBox5.Enabled = false;
             this.groupBox5.Location = new System.Drawing.Point(12, 28);
             this.groupBox5.Name = "groupBox5";
@@ -321,7 +319,7 @@
             this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox6.Controls.Add(this.button4);
-            this.groupBox6.Controls.Add(this.button2);
+            this.groupBox6.Controls.Add(this.кнопкаПолучитьСообщение);
             this.groupBox6.Location = new System.Drawing.Point(6, 276);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(583, 64);
@@ -342,29 +340,29 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.расшифроватьСообщение);
             // 
-            // button2
+            // кнопкаПолучитьСообщение
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.кнопкаПолучитьСообщение.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(7, 22);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(188, 29);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Получить сообщение";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.получитьСообщение);
+            this.кнопкаПолучитьСообщение.Location = new System.Drawing.Point(7, 22);
+            this.кнопкаПолучитьСообщение.Name = "кнопкаПолучитьСообщение";
+            this.кнопкаПолучитьСообщение.Size = new System.Drawing.Size(188, 29);
+            this.кнопкаПолучитьСообщение.TabIndex = 0;
+            this.кнопкаПолучитьСообщение.Text = "Получить сообщение";
+            this.кнопкаПолучитьСообщение.UseVisualStyleBackColor = true;
+            this.кнопкаПолучитьСообщение.Click += new System.EventHandler(this.получитьСообщение);
             // 
-            // richTextBox2
+            // полеОтображенияСообщения
             // 
-            this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.полеОтображенияСообщения.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox2.Location = new System.Drawing.Point(7, 24);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(582, 249);
-            this.richTextBox2.TabIndex = 0;
-            this.richTextBox2.Text = "";
+            this.полеОтображенияСообщения.Location = new System.Drawing.Point(7, 24);
+            this.полеОтображенияСообщения.Name = "полеОтображенияСообщения";
+            this.полеОтображенияСообщения.Size = new System.Drawing.Size(582, 249);
+            this.полеОтображенияСообщения.TabIndex = 0;
+            this.полеОтображенияСообщения.Text = "";
             // 
             // Form1
             // 
@@ -383,7 +381,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Программа";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -419,16 +417,16 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel меткаВСтрокеСтатуса;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button кнопкаОТправитьСообщениеКакЕсть;
+        private System.Windows.Forms.Button кнопкаОтправитьСообщениеЗашифрованным;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.Button кнопкаПолучитьСообщение;
+        private System.Windows.Forms.RichTextBox полеОтображенияСообщения;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem8;
     }
 }

@@ -51,7 +51,6 @@ namespace SecureMail
         {
             textBox1.Text = string.Empty;
             textBox2.Text = string.Empty;
-            //textBox3.Text = string.Empty;
         }
     }
 }
