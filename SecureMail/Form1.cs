@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Cryptography;
-using System.Web;
 using System.Net;
 using System.Net.Mail;
-using System.Xml;
 using System.IO;
 using OpenPop.Pop3;
-
 namespace SecureMail
 {
     public partial class Form1 : Form
     {
-        const int размерБлокаШифрования = 80;
         const string фильтрОткрытогоКлюча = "Open key (*.okey)|*.okey";
         const string фильтрЗакрытогоКлюча = "Private key (*.pkey)|*.pkey";
         struct ДанныеПользователя
@@ -78,10 +70,6 @@ namespace SecureMail
                 MessageBox.Show(this, "Ключи сохранены по адресу:\n" + обозревательПапок.SelectedPath.ToString(), "Еведомление.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            
-        }
         private void toolStripMenuItem6_Click(object sender, EventArgs e)
         {
             Form2 формаВводаУчетныхДанных = new Form2(this);
@@ -124,7 +112,7 @@ namespace SecureMail
             else
                 MessageBox.Show("Сообщение успешно отправлено!","Уведомление.",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
-        private void отправитьСообщениеЗашифрованным(object sender, EventArgs e)
+        private void подписатьСообщение(object sender, EventArgs e)
         {
             OpenFileDialog диалоговоеОкноОткрытияФайла = new OpenFileDialog();
             диалоговоеОкноОткрытияФайла.Filter = фильтрЗакрытогоКлюча;
@@ -248,7 +236,7 @@ namespace SecureMail
                     button4.Enabled = true;
             }
         }
-        private void расшифроватьСообщение(object sender, EventArgs e)
+        private void проверитьПодпись(object sender, EventArgs e)
         {
             OpenFileDialog диалоговоеОкноОткрытияФайла = new OpenFileDialog();
             диалоговоеОкноОткрытияФайла.Filter = фильтрОткрытогоКлюча;

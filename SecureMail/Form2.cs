@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Mail;
-
 namespace SecureMail
 {
     public partial class Form2 : Form
@@ -33,9 +25,7 @@ namespace SecureMail
                     this.Close();
                 }
                 else
-                {
                     MessageBox.Show(this, "Введите пароль!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
             catch (FormatException exp)
             {
@@ -46,7 +36,6 @@ namespace SecureMail
                 textBox2.Text = string.Empty;
             }
         }
-
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             textBox1.Text = string.Empty;

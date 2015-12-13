@@ -299,7 +299,7 @@
             this.кнопкаОтправитьСообщениеЗашифрованным.TabIndex = 0;
             this.кнопкаОтправитьСообщениеЗашифрованным.Text = "Подписать сообщение";
             this.кнопкаОтправитьСообщениеЗашифрованным.UseVisualStyleBackColor = true;
-            this.кнопкаОтправитьСообщениеЗашифрованным.Click += new System.EventHandler(this.отправитьСообщениеЗашифрованным);
+            this.кнопкаОтправитьСообщениеЗашифрованным.Click += new System.EventHandler(this.подписатьСообщение);
             // 
             // groupBox5
             // 
@@ -341,7 +341,7 @@
             this.button4.TabIndex = 1;
             this.button4.Text = "Проверить подпись";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.расшифроватьСообщение);
+            this.button4.Click += new System.EventHandler(this.проверитьПодпись);
             // 
             // кнопкаПолучитьСообщение
             // 
@@ -389,7 +389,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Программа";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
