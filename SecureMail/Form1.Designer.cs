@@ -55,6 +55,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.кнопкаПолучитьСообщение = new System.Windows.Forms.Button();
             this.полеОтображенияСообщения = new System.Windows.Forms.RichTextBox();
+            this.меткаПодписи = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -122,7 +123,7 @@
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuStrip1.Size = new System.Drawing.Size(619, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(668, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -144,11 +145,12 @@
             // 
             this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Location = new System.Drawing.Point(13, 27);
+            this.groupBox1.Controls.Add(this.groupBox4);
+            this.groupBox1.Location = new System.Drawing.Point(13, 29);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(593, 281);
+            this.groupBox1.Size = new System.Drawing.Size(642, 364);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Отправка письма";
@@ -159,9 +161,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.richTextBox1);
-            this.groupBox3.Location = new System.Drawing.Point(8, 134);
+            this.groupBox3.Location = new System.Drawing.Point(8, 127);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(577, 140);
+            this.groupBox3.Size = new System.Drawing.Size(626, 164);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Текст письма";
@@ -172,7 +174,7 @@
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.Location = new System.Drawing.Point(3, 20);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(571, 117);
+            this.richTextBox1.Size = new System.Drawing.Size(620, 141);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -188,7 +190,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(575, 102);
+            this.groupBox2.Size = new System.Drawing.Size(624, 102);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Заголовок";
@@ -214,7 +216,7 @@
             this.textBox1.Location = new System.Drawing.Point(66, 26);
             this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(501, 24);
+            this.textBox1.Size = new System.Drawing.Size(550, 24);
             this.textBox1.TabIndex = 1;
             // 
             // textBox2
@@ -225,7 +227,7 @@
             this.textBox2.Location = new System.Drawing.Point(66, 62);
             this.textBox2.Margin = new System.Windows.Forms.Padding(4);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(501, 24);
+            this.textBox2.Size = new System.Drawing.Size(550, 24);
             this.textBox2.TabIndex = 2;
             // 
             // label1
@@ -244,10 +246,11 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.меткаВСтрокеСтатуса});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 380);
+            this.меткаВСтрокеСтатуса,
+            this.меткаПодписи});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 397);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(619, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(668, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -263,9 +266,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.кнопкаОТправитьСообщениеКакЕсть);
             this.groupBox4.Controls.Add(this.кнопкаОтправитьСообщениеЗашифрованным);
-            this.groupBox4.Location = new System.Drawing.Point(13, 316);
+            this.groupBox4.Location = new System.Drawing.Point(8, 297);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(593, 58);
+            this.groupBox4.Size = new System.Drawing.Size(626, 58);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Отправка сообщения";
@@ -276,11 +279,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.кнопкаОТправитьСообщениеКакЕсть.Enabled = false;
-            this.кнопкаОТправитьСообщениеКакЕсть.Location = new System.Drawing.Point(225, 24);
+            this.кнопкаОТправитьСообщениеКакЕсть.Location = new System.Drawing.Point(337, 24);
             this.кнопкаОТправитьСообщениеКакЕсть.Name = "кнопкаОТправитьСообщениеКакЕсть";
-            this.кнопкаОТправитьСообщениеКакЕсть.Size = new System.Drawing.Size(229, 28);
+            this.кнопкаОТправитьСообщениеКакЕсть.Size = new System.Drawing.Size(238, 28);
             this.кнопкаОТправитьСообщениеКакЕсть.TabIndex = 1;
-            this.кнопкаОТправитьСообщениеКакЕсть.Text = "Как есть";
+            this.кнопкаОТправитьСообщениеКакЕсть.Text = "Отправить";
             this.кнопкаОТправитьСообщениеКакЕсть.UseVisualStyleBackColor = true;
             this.кнопкаОТправитьСообщениеКакЕсть.Click += new System.EventHandler(this.отправитьСообщениеКакЕсть);
             // 
@@ -292,9 +295,9 @@
             this.кнопкаОтправитьСообщениеЗашифрованным.Enabled = false;
             this.кнопкаОтправитьСообщениеЗашифрованным.Location = new System.Drawing.Point(7, 24);
             this.кнопкаОтправитьСообщениеЗашифрованным.Name = "кнопкаОтправитьСообщениеЗашифрованным";
-            this.кнопкаОтправитьСообщениеЗашифрованным.Size = new System.Drawing.Size(211, 28);
+            this.кнопкаОтправитьСообщениеЗашифрованным.Size = new System.Drawing.Size(236, 28);
             this.кнопкаОтправитьСообщениеЗашифрованным.TabIndex = 0;
-            this.кнопкаОтправитьСообщениеЗашифрованным.Text = "Зашифрованным";
+            this.кнопкаОтправитьСообщениеЗашифрованным.Text = "Подписать сообщение";
             this.кнопкаОтправитьСообщениеЗашифрованным.UseVisualStyleBackColor = true;
             this.кнопкаОтправитьСообщениеЗашифрованным.Click += new System.EventHandler(this.отправитьСообщениеЗашифрованным);
             // 
@@ -303,12 +306,12 @@
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.groupBox6);
             this.groupBox5.Controls.Add(this.полеОтображенияСообщения);
+            this.groupBox5.Controls.Add(this.groupBox6);
             this.groupBox5.Enabled = false;
             this.groupBox5.Location = new System.Drawing.Point(12, 28);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(595, 346);
+            this.groupBox5.Size = new System.Drawing.Size(644, 366);
             this.groupBox5.TabIndex = 6;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Прочитать письмо";
@@ -320,23 +323,23 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox6.Controls.Add(this.button4);
             this.groupBox6.Controls.Add(this.кнопкаПолучитьСообщение);
-            this.groupBox6.Location = new System.Drawing.Point(6, 276);
+            this.groupBox6.Location = new System.Drawing.Point(7, 296);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(583, 64);
+            this.groupBox6.Size = new System.Drawing.Size(631, 64);
             this.groupBox6.TabIndex = 1;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Получение и расшифрова";
+            this.groupBox6.Text = "Получение и проверка";
             // 
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(202, 22);
+            this.button4.Location = new System.Drawing.Point(304, 22);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(185, 29);
+            this.button4.Size = new System.Drawing.Size(233, 29);
             this.button4.TabIndex = 1;
-            this.button4.Text = "Расшифровать";
+            this.button4.Text = "Проверить подпись";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.расшифроватьСообщение);
             // 
@@ -347,7 +350,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.кнопкаПолучитьСообщение.Location = new System.Drawing.Point(7, 22);
             this.кнопкаПолучитьСообщение.Name = "кнопкаПолучитьСообщение";
-            this.кнопкаПолучитьСообщение.Size = new System.Drawing.Size(188, 29);
+            this.кнопкаПолучитьСообщение.Size = new System.Drawing.Size(236, 29);
             this.кнопкаПолучитьСообщение.TabIndex = 0;
             this.кнопкаПолучитьСообщение.Text = "Получить сообщение";
             this.кнопкаПолучитьСообщение.UseVisualStyleBackColor = true;
@@ -360,9 +363,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.полеОтображенияСообщения.Location = new System.Drawing.Point(7, 24);
             this.полеОтображенияСообщения.Name = "полеОтображенияСообщения";
-            this.полеОтображенияСообщения.Size = new System.Drawing.Size(582, 249);
+            this.полеОтображенияСообщения.Size = new System.Drawing.Size(631, 269);
             this.полеОтображенияСообщения.TabIndex = 0;
             this.полеОтображенияСообщения.Text = "";
+            // 
+            // меткаПодписи
+            // 
+            this.меткаПодписи.Name = "меткаПодписи";
+            this.меткаПодписи.Size = new System.Drawing.Size(0, 17);
             // 
             // Form1
             // 
@@ -370,10 +378,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(619, 402);
+            this.ClientSize = new System.Drawing.Size(668, 419);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox5);
             this.DoubleBuffered = true;
@@ -428,6 +435,7 @@
         private System.Windows.Forms.Button кнопкаПолучитьСообщение;
         private System.Windows.Forms.RichTextBox полеОтображенияСообщения;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem8;
+        private System.Windows.Forms.ToolStripStatusLabel меткаПодписи;
     }
 }
 

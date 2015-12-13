@@ -127,12 +127,12 @@ namespace SecureMail
         private void отправитьСообщениеЗашифрованным(object sender, EventArgs e)
         {
             OpenFileDialog диалоговоеОкноОткрытияФайла = new OpenFileDialog();
-            диалоговоеОкноОткрытияФайла.Filter = фильтрОткрытогоКлюча;
+            диалоговоеОкноОткрытияФайла.Filter = фильтрЗакрытогоКлюча;
             диалоговоеОкноОткрытияФайла.FilterIndex = 1;
-            диалоговоеОкноОткрытияФайла.Title = "Выберите файл открытого ключа.";
+            диалоговоеОкноОткрытияФайла.Title = "Выберите файл закрытого ключа.";
             диалоговоеОкноОткрытияФайла.Multiselect = false;
             диалоговоеОкноОткрытияФайла.RestoreDirectory = true;
-            if (диалоговоеОкноОткрытияФайла.ShowDialog()==DialogResult.OK)
+            if (диалоговоеОкноОткрытияФайла.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -140,43 +140,15 @@ namespace SecureMail
                     string ключ = потокЧитающийИзФайла.ReadToEnd();
                     RSACryptoServiceProvider RSACSP = new RSACryptoServiceProvider();
                     RSACSP.FromXmlString(ключ);
-                    byte[] массивБайтов = Encoding.UTF32.GetBytes(richTextBox1.Text);
-                    string выходнаяСтрока = string.Empty;
-                    if (массивБайтов.Length > размерБлокаШифрования)
-                    {
-                        int итератор = 0;
-                        int количествоБлоков = 0;
-                        bool флаг = false;
-                        byte[] блок = new byte[размерБлокаШифрования];
-                        for (int i = 0; i < массивБайтов.Length; i++)
-                        {
-                            if (итератор < размерБлокаШифрования && i != массивБайтов.Length)
-                            {
-                                блок[итератор] = массивБайтов[i];
-                                итератор++;
-                            }
-                            else
-                            {
-                                выходнаяСтрока += ByteToHEXString(RSACSP.Encrypt(блок, true));
-                                итератор = 0;
-                                количествоБлоков++;
-                                i--;
-                                if (массивБайтов.Length > размерБлокаШифрования * количествоБлоков + размерБлокаШифрования)
-                                    блок = new byte[размерБлокаШифрования];
-                                else
-                                {
-                                    блок = new byte[массивБайтов.Length - размерБлокаШифрования * количествоБлоков];
-                                    флаг = true;
-                                }
-                            }
-                        }
-                        if (флаг == true)
-                            выходнаяСтрока += ByteToHEXString(RSACSP.Encrypt(блок, true));
-                    }
-                    else
-                        выходнаяСтрока += ByteToHEXString(RSACSP.Encrypt(массивБайтов, true));
-                    отправитьСообщение("<!MSG_ENCRYPT!>\n<MSG>" + выходнаяСтрока + "</MSG>");
-                    потокЧитающийИзФайла.Close();
+                    RSAPKCS1SignatureFormatter RSAFormatter = new RSAPKCS1SignatureFormatter(RSACSP);
+                    RSAFormatter.SetHashAlgorithm("MD5");
+                    MD5CryptoServiceProvider MD5CSP = new MD5CryptoServiceProvider();
+                    byte[] массивБайтов =  MD5CSP.ComputeHash(Encoding.UTF32.GetBytes(richTextBox1.Text));
+                    byte[] подписанныйМассив = RSAFormatter.CreateSignature(массивБайтов);
+                    richTextBox1.Text = "<MSG>" + richTextBox1.Text + "</MSG>\n"
+                        + "<SIGNED>" + ByteToHEXString(подписанныйМассив) + "</SIGNED>";
+                    RSACSP.Dispose();
+                    MD5CSP.Dispose();
                 }
                 catch (Exception exp)
                 {
@@ -272,16 +244,16 @@ namespace SecureMail
                 полеОтображенияСообщения.AppendText("\nТема: " + полученноеСообщение.Subject);
                 полеОтображенияСообщения.AppendText("\nСообщение: " + полученноеСообщение.Body);
                 клиентДляПолученияСообщения.Disconnect();
-                if (полученноеСообщение.Body.IndexOf("<!MSG_ENCRYPT!>") != -1)
+                if (полученноеСообщение.Body.IndexOf("<SIGNED>") != -1)
                     button4.Enabled = true;
             }
         }
         private void расшифроватьСообщение(object sender, EventArgs e)
         {
             OpenFileDialog диалоговоеОкноОткрытияФайла = new OpenFileDialog();
-            диалоговоеОкноОткрытияФайла.Filter = фильтрЗакрытогоКлюча;
+            диалоговоеОкноОткрытияФайла.Filter = фильтрОткрытогоКлюча;
             диалоговоеОкноОткрытияФайла.FilterIndex = 1;
-            диалоговоеОкноОткрытияФайла.Title = "Выберите файл закрытого ключа.";
+            диалоговоеОкноОткрытияФайла.Title = "Выберите файл открытого ключа.";
             диалоговоеОкноОткрытияФайла.Multiselect = false;
             диалоговоеОкноОткрытияФайла.RestoreDirectory = true;
             if (диалоговоеОкноОткрытияФайла.ShowDialog() == DialogResult.OK)
@@ -292,24 +264,23 @@ namespace SecureMail
                     string ключ = потокЧитающийИзФайла.ReadToEnd();
                     RSACryptoServiceProvider RSACSP = new RSACryptoServiceProvider();
                     RSACSP.FromXmlString(ключ);
+                    RSAPKCS1SignatureDeformatter RSADeformatter = new RSAPKCS1SignatureDeformatter(RSACSP);
+                    RSADeformatter.SetHashAlgorithm("MD5");
                     int началоСообщения = полученноеСообщение.Body.IndexOf("<MSG>") + 5;
-                    int конецСообщения = полученноеСообщение.Body.IndexOf("</MSG>") - 5;
+                    int конецСообщения = полученноеСообщение.Body.IndexOf("</MSG>");
+                    int началоПодписи = полученноеСообщение.Body.IndexOf("<SIGNED>") + 8;
+                    int конецПодписи = полученноеСообщение.Body.IndexOf("</SIGNED>");
                     string телоСообщения = полученноеСообщение.Body.Substring(началоСообщения, конецСообщения - началоСообщения);
-                    byte[] массивБайтов =  HEXStringToByte(телоСообщения);
-                    string временнаяСтрока = string.Empty;
-                    int количествоБлоков = массивБайтов.Length / 128;
-                    for (int i = 0; i < количествоБлоков; i++)
-                    {
-                        byte[] веременныйМассив = массивБайтов.Skip(128 * i).ToArray().Take(128).ToArray();
-                        временнаяСтрока += ByteToHEXString(RSACSP.Decrypt(веременныйМассив, true));
-                    }
-                    телоСообщения = Encoding.UTF32.GetString(HEXStringToByte(временнаяСтрока));
-                    полеОтображенияСообщения.Clear();
-                    полеОтображенияСообщения.AppendText("От: " + полученноеСообщение.From.Address);
-                    полеОтображенияСообщения.AppendText("\nТема: " + полученноеСообщение.Subject);
-                    полеОтображенияСообщения.AppendText("\nСообщение: " +телоСообщения+полученноеСообщение.Body.Substring(конецСообщения+6));
+                    string подпись = полученноеСообщение.Body.Substring(началоПодписи, конецПодписи- началоПодписи);
+                    MD5CryptoServiceProvider MD5CSP = new MD5CryptoServiceProvider();
+                    byte[] массивСообщение = MD5CSP.ComputeHash(Encoding.UTF32.GetBytes(телоСообщения));
+                    byte[] массивПодпись = HEXStringToByte(подпись);
+                    bool b = RSADeformatter.VerifySignature(массивСообщение, массивПодпись);
+                    меткаПодписи.Text = (b) ? "Подпись верна!" : "Подпись не верна!";
+                    меткаПодписи.ForeColor = (b) ? Color.Green : Color.Red;
                     потокЧитающийИзФайла.Close();
                     RSACSP.Dispose();
+                    MD5CSP.Dispose();
                 }
                 catch (Exception exp)
                 {
